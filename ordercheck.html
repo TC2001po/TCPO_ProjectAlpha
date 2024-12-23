@@ -44,8 +44,9 @@
 
   <script>
     async function loadOrders() {
-      const response = await fetch('https://your-supabase-api-url.com/orders');
-      const orders = await response.json();
+        const response = await fetch('/api/orders');
+        const orders = await response.json();
+
       const tableBody = document.querySelector('#ordersTable tbody');
       tableBody.innerHTML = '';
       orders.forEach(order => {

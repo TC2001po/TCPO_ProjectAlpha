@@ -45,8 +45,9 @@
 
   <script>
     async function loadOrders() {
-      const response = await fetch('https://your-supabase-api-url.com/orders');
-      const orders = await response.json();
+        const response = await fetch('/api/orders');
+        const orders = await response.json();
+
       const tableBody = document.querySelector('#ordersTable tbody');
       tableBody.innerHTML = '';
       orders.forEach(order => {
@@ -65,11 +66,22 @@
     }
 
     async function cancelOrder(orderId, button) {
-      if (confirm('주문을 취소하시겠습니까?')) {
-        button.closest('tr').classList.add('cancelled');
-        alert('주문이 취소되었습니다.');
-      }
+  if (confirm('주문을 취소하시겠습니까?')) {
+    const response = await fetch('/api/orders', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: orderId }),
+    });
+
+    if (response.ok) {
+      button.closest('tr').classList.add('cancelled');
+      alert('주문이 취소되었습니다.');
+    } else {
+      alert('취소에 실패했습니다.');
     }
+  }
+}
+
 
     loadOrders();
     setInterval(loadOrders, 10000); // 10초마다 데이터 새로고침
